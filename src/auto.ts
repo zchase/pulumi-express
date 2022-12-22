@@ -1,11 +1,17 @@
 import { InlineProgramArgs, LocalWorkspace } from "@pulumi/pulumi/automation";
 import { createAwsService } from "./program";
 
+function logPulumiOutput(msg: string) {
+    if (msg.split(" ").length > 2) {
+        console.log(msg);
+    }
+}
+
 export async function runPulumi() {
     // Create our stack
     const args: InlineProgramArgs = {
         stackName: "dev",
-        projectName: "inlineNode",
+        projectName: "pulumi-express-demo",
         program: createAwsService,
     };
 
@@ -22,17 +28,24 @@ export async function runPulumi() {
     console.info("config set");
 
     console.info("refreshing stack...");
-    await stack.refresh({ onOutput: console.info });
+    await stack.refresh({ onOutput: logPulumiOutput });
     console.info("refresh complete");
+
+    if (process.env.PULUMI_EXPRESS_INFRASTRUCTURE_PREVIEW) {
+        console.info("previewing stack...");
+        await stack.preview({ onOutput: logPulumiOutput });
+        console.log("preview complete");
+        return;
+    }
 
     if (process.env.PULUMI_EXPRESS_INFRASTRUCTURE_DESTROY) {
         console.info("destroying stack...");
-        await stack.destroy({ onOutput: console.info });
+        await stack.destroy({ onOutput: logPulumiOutput });
         console.log("destroy complete");
         return;
     }
 
     console.info("updating stack...");
-    await stack.up({ onOutput: console.info });
+    await stack.up({ onOutput: logPulumiOutput });
     console.log("update complete");
 }

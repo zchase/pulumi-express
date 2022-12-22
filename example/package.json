@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "deploy": "PULUMI_EXPRESS_INFRASTRUCTURE_DEPLOY=1 ts-node index.ts",
-    "destroy": "PULUMI_EXPRESS_INFRASTRUCTURE_DESTROY=1 ts-node index.ts"
+    "destroy": "PULUMI_EXPRESS_INFRASTRUCTURE_DESTROY=1 ts-node index.ts",
+    "preview": "PULUMI_EXPRESS_INFRASTRUCTURE_PREVIEW=1 ts-node index.ts"
   },
   "keywords": [],
   "author": "",
